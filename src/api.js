@@ -60,7 +60,11 @@ export const api = {
     fetch(`${BASE_URL}/api/services/shorten-url`, {
       method: "POST",
       headers: headers(),
-      body: JSON.stringify({ longUrl, baseUrl: "https://localhost:7260" }),
+      body: JSON.stringify({
+        longUrl,
+        baseUrl:
+          "https://creditsystem-api-dfhadyeze5cee0hu.centralindia-01.azurewebsites.net",
+      }),
     }).then((r) => r.json()),
 
   getUsage: () =>
