@@ -77,6 +77,9 @@ export const api = {
     fetch(`${BASE_URL}/api/payments/create-checkout`, {
       method: "POST",
       headers: headers(),
-      body: JSON.stringify({ planId, baseUrl: "http://localhost:5173" }),
+      body: JSON.stringify({
+        planId,
+        baseUrl: "https://creditsystem-frontend.vercel.app",
+      }),
     }).then((r) => r.json()),
 };

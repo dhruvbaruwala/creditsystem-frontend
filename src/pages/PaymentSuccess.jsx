@@ -15,16 +15,16 @@ export default function PaymentSuccess() {
 
   const verifyAndAddCredits = async (sessionId) => {
     try {
-      const res = await fetch(
-        `https://localhost:7260/api/payments/confirm/${sessionId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+const res = await fetch(
+  `https://creditsystem-api-dfhadyeze5cee0hu.centralindia-01.azurewebsites.net/api/payments/confirm/${sessionId}`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  },
+);
       const data = await res.json();
       if (res.ok) {
         setMsg(`${data.creditsAdded} credits added to your account.`);
