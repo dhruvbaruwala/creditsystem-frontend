@@ -79,7 +79,7 @@ export const api = {
       headers: headers(),
       body: JSON.stringify({
         planId,
-        baseUrl: "https://creditsystem-frontend.vercel.app",
+        baseUrl: "https://quotixapp.vercel.app",
       }),
     }).then((r) => r.json()),
 };
