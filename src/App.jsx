@@ -5,36 +5,45 @@ import Dashboard from "./pages/Dashboard";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import AdminLogin from "./components/Admin/AdminLogin";
 import AdminDashboard from "./components/Admin/AdminDashboard";
+import LandingPage from "./pages/LandingPage";
 
 export default function App() {
   const [page, setPage] = useState("login");
   const [user, setUser] = useState(null);
+useEffect(() => {
+  const path = window.location.pathname;
+  if (page === "landing")
+    return (
+      <LandingPage
+        onLogin={() => setPage("login")}
+        onRegister={() => setPage("register")}
+      />
+    );
+  if (path === "/payment-success") {
+    setPage("payment-success");
+    return;
+  }
+  if (path === "/admin") {
+    setPage("admin-login");
+    return;
+  }
 
-  useEffect(() => {
-    const path = window.location.pathname;
+  const adminToken = localStorage.getItem("adminToken");
+  if (adminToken) {
+    setPage("admin-dashboard");
+    return;
+  }
 
-    if (path === "/payment-success") {
-      setPage("payment-success");
-      return;
-    }
-    if (path === "/admin") {
-      setPage("admin-login");
-      return;
-    }
+  const token = localStorage.getItem("token");
+  const name = localStorage.getItem("userName");
+  if (token && name) {
+    setUser({ name });
+    setPage("dashboard");
+    return;
+  }
 
-    const adminToken = localStorage.getItem("adminToken");
-    if (adminToken) {
-      setPage("admin-dashboard");
-      return;
-    }
-
-    const token = localStorage.getItem("token");
-    const name = localStorage.getItem("userName");
-    if (token && name) {
-      setUser({ name });
-      setPage("dashboard");
-    }
-  }, []);
+  setPage("landing");
+}, []);
 
   const handleLogin = (userData) => {
     localStorage.setItem("token", userData.token);
