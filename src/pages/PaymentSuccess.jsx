@@ -1,30 +1,31 @@
-import { useEffect, useState } from "react";
-import { api } from "../api";
+import { useEffect, useState, useRef } from "react";
 
 export default function PaymentSuccess() {
   const [msg, setMsg] = useState("Verifying your payment...");
   const [done, setDone] = useState(false);
+  const calledRef = useRef(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const sessionId = params.get("session_id");
-    if (sessionId) {
+    if (sessionId && !calledRef.current) {
+      calledRef.current = true;
       verifyAndAddCredits(sessionId);
     }
   }, []);
 
   const verifyAndAddCredits = async (sessionId) => {
     try {
-const res = await fetch(
-  `https://creditsystem-api-dfhadyeze5cee0hu.centralindia-01.azurewebsites.net/api/payments/confirm/${sessionId}`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  },
-);
+      const res = await fetch(
+        `https://creditsystem-api-dfhadyeze5cee0hu.centralindia-01.azurewebsites.net/api/payments/confirm/${sessionId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
       const data = await res.json();
       if (res.ok) {
         setMsg(`${data.creditsAdded} credits added to your account.`);
