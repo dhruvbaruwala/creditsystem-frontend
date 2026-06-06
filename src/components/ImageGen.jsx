@@ -15,6 +15,7 @@ export default function ImageGen({ onUse }) {
     setResult(null);
     try {
       const data = await api.generateImage(prompt);
+      console.log("Generate clicked");
       if (data.imageUrl) {
         setResult(data);
         setImgLoading(true);
