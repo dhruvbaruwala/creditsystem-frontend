@@ -111,7 +111,9 @@ export default function ImageGen({ onUse }) {
             onLoad={() => setImgLoading(false)}
             onError={() => {
               setImgLoading(false);
-              setError("Image failed to load. Try a different prompt.");
+              setError(
+                "Image service is currently busy. Please wait 30-60 seconds and try again.",
+              );
             }}
             style={{
               width: "100%",
