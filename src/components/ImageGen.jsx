@@ -13,9 +13,9 @@ export default function ImageGen({ onUse }) {
     setLoading(true);
     setError("");
     setResult(null);
+    setImgLoading(false);
     try {
       const data = await api.generateImage(prompt);
-      console.log("Generate clicked");
       if (data.imageUrl) {
         setResult(data);
         setImgLoading(true);
@@ -33,6 +33,21 @@ export default function ImageGen({ onUse }) {
       setError("Cannot connect to API. Is your API running?");
     }
     setLoading(false);
+  };
+
+  const handleDownload = async () => {
+    try {
+      const res = await fetch(result.imageUrl);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "generated-image.png";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      alert("Download failed. Try right-clicking the image and saving.");
+    }
   };
 
   return (
@@ -94,6 +109,7 @@ export default function ImageGen({ onUse }) {
         )}
       </button>
 
+      {/* Skeleton loader while image loads */}
       {result && imgLoading && (
         <div style={skeletonStyle}>
           <div style={shimmerBarStyle} />
@@ -103,16 +119,18 @@ export default function ImageGen({ onUse }) {
         </div>
       )}
 
+      {/* Image result */}
       {result && (
         <div style={{ marginTop: 16, animation: "fadeUp 0.4s ease both" }}>
           <img
             src={result.imageUrl}
             alt={prompt}
+            crossOrigin="anonymous"
             onLoad={() => setImgLoading(false)}
             onError={() => {
               setImgLoading(false);
               setError(
-                "Image service is currently busy. Please wait 30-60 seconds and try again.",
+                "Image service is currently busy. Please wait 30–60 seconds and try again.",
               );
             }}
             style={{
@@ -123,8 +141,10 @@ export default function ImageGen({ onUse }) {
               height: imgLoading ? 0 : "auto",
               transition: "opacity 0.4s ease",
               boxShadow: "0 4px 20px rgba(108,99,255,0.12)",
+              display: "block",
             }}
           />
+
           {!imgLoading && (
             <div
               style={{
@@ -139,15 +159,9 @@ export default function ImageGen({ onUse }) {
               <span style={creditBadge}>
                 ⚡ {result.creditsUsed} used · {result.remainingBalance} left
               </span>
-              <a
-                href={result.imageUrl}
-                download="generated-image.png"
-                target="_blank"
-                rel="noreferrer"
-                style={downloadLink}
-              >
+              <button onClick={handleDownload} style={downloadBtn}>
                 ↓ Download
-              </a>
+              </button>
             </div>
           )}
         </div>
@@ -162,7 +176,6 @@ export default function ImageGen({ onUse }) {
   );
 }
 
-// Shared styles
 const cardStyle = {
   background: "#fff",
   borderRadius: 20,
@@ -208,7 +221,7 @@ const inputStyle = {
   fontFamily: "'DM Sans', sans-serif",
   background: "#f8f9ff",
   color: "#1a1d35",
-  transition: "border-color 0.2s, box-shadow 0.2s",
+  boxSizing: "border-box",
 };
 
 const btnStyle = {
@@ -263,15 +276,15 @@ const creditBadge = {
   border: "1px solid #e4e7f5",
 };
 
-const downloadLink = {
+const downloadBtn = {
   fontSize: 13,
   color: "#6c63ff",
-  textDecoration: "none",
   fontWeight: 600,
   padding: "5px 14px",
   background: "rgba(108,99,255,0.08)",
   borderRadius: 20,
   border: "1px solid rgba(108,99,255,0.2)",
+  cursor: "pointer",
 };
 
 const spinnerStyle = {
