@@ -64,7 +64,7 @@ export default function Dashboard({ user, onLogout }) {
             letterSpacing: "-0.5px",
           }}
         >
-          Credit<span style={{ color: "#6c63ff" }}>System</span>
+          Quotix<span style={{ color: "#6c63ff" }}>IO</span>
         </span>
 
         <span style={{ color: "#8b90b0", fontSize: 13 }}>
