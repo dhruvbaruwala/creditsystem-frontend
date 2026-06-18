@@ -283,10 +283,9 @@ const iconBadge = {
 
 const titleStyle = {
   fontFamily: "'Syne', sans-serif",
-  fontWeight: 800,
-  fontSize: 18,
+  fontWeight: 700,
+  fontSize: 16,
   color: "#0f1123",
-  letterSpacing: "-0.5px",
 };
 
 const subtitleStyle = {
